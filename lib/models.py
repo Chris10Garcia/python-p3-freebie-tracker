@@ -58,5 +58,9 @@ class Freebie(Base):
     company_id = Column(Integer(), ForeignKey('companies.id'))
     dev_id = Column(Integer(), ForeignKey('devs.id'))
 
+    def print_details(self):
+        return f"{self.dev.name} owns a {self.item_name} from {self.company.name}"
+
+
     def __repr__(self):
         return f"<Freebie {self.item_name}>"
