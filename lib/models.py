@@ -25,9 +25,10 @@ class Company(Base):
     name = Column(String())
     founding_year = Column(Integer())
 
-    devs = relationship('Dev', backref=backref('company'))
-    # freebees (pural) = relationship(Freebee, backref=backref('comapny'), cascade= stuff)
-    # devs = relationship('Dev', secondary=table_dev_company, back_populates='companys')
+    #many to many
+    devs = relationship('Dev', secondary=company_dev, back_populates = 'companies')
+    #one to many
+    freebies = relationship('Freebie', backref=backref('company'))
 
     def __repr__(self):
         return f'<Company {self.name}>'
@@ -37,6 +38,11 @@ class Dev(Base):
 
     id = Column(Integer(), primary_key=True)
     name= Column(String())
+
+    #one to many
+    freebies = relationship('Freebie', backref=backref('dev'))
+    #many to many
+    companies = relationship('Company', secondary=company_dev, back_populates = 'devs')
 
     def __repr__(self):
         return f'<Dev {self.name}>'
