@@ -13,8 +13,8 @@ Base = declarative_base(metadata=metadata)
 company_dev = Table(
     'company_devs',
     Base.metadata,
-    Column('company_id', ForeignKey('companies.id', primary_key=True)),
-    Column('dev_id', ForeignKey('devs.id', primary_key=True)),
+    Column('company_id', ForeignKey('companies.id'), primary_key=True),
+    Column('dev_id', ForeignKey('devs.id'), primary_key=True),
     extend_existing=True,
 )
 
