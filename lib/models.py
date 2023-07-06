@@ -36,6 +36,8 @@ class Company(Base):
     def __init__(self):
         self.add_to_all(self)
 
+    # this is a sqlalchemy thing.
+    # on load, this acts like __init__
     @reconstructor
     def init_on_load(self):
         self.add_to_all(self)
@@ -77,6 +79,13 @@ class Dev(Base):
             if freebie.item_name == item:
                 return True
         return False
+
+    def give_away(self, dev, freebie):
+        if self == freebie.dev:
+            freebie.dev = dev
+            return "Sucessful"
+        else:
+            return f"The {freebie} does not belong to {self}. This person can not give it away"
 
     def __repr__(self):
         return f'<Dev {self.name}>'
