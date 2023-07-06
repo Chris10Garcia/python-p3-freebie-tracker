@@ -1,5 +1,5 @@
-from sqlalchemy import ForeignKey, Column, Integer, String, MetaData, Table, create_engine
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import ForeignKey, Column, Integer, String, MetaData, Table
+from sqlalchemy.orm import relationship, backref, reconstructor
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -33,28 +33,24 @@ class Company(Base):
     #one to many
     freebies = relationship('Freebie', backref=backref('company'))
 
-    ###########
-    # @classmethod
-    # def __init__(cls, self):
-    #     cls.all.append(self)
+    def __init__(self):
+        self.add_to_all(self)
+
+    @reconstructor
+    def init_on_load(self):
+        self.add_to_all(self)
+
+    @classmethod
+    def add_to_all(cls, obj):
+        cls.all.append(obj)
 
     def __repr__(self):
         return f'<Company {self.name}>'
     
 
-    # @classmethod
-    # def oldest_company(cls):
-    #     engine = create_engine
-    #     Session = sessionmaker(bind=engine)
-    #     session = Session()
-
-    #     all = session.query(Company).all()
-
-    #     cls.all = [company for company in all]
-
-
-
-    #     return f'{cls.founding_year}'
+    @classmethod
+    def oldest_company(cls):
+        return min(cls.all, key=lambda x : x.founding_year)
 
 
 class Dev(Base):
