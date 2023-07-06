@@ -43,14 +43,13 @@ class Company(Base):
     @classmethod
     def add_to_all(cls, obj):
         cls.all.append(obj)
-
-    def __repr__(self):
-        return f'<Company {self.name}>'
     
-
     @classmethod
     def oldest_company(cls):
         return min(cls.all, key=lambda x : x.founding_year)
+
+    def __repr__(self):
+        return f'<Company {self.name}>'
 
 
 class Dev(Base):
@@ -63,6 +62,12 @@ class Dev(Base):
     freebies = relationship('Freebie', backref=backref('dev'))
     #many to many
     companies = relationship('Company', secondary=company_dev, back_populates = 'devs')
+
+    def received_one(self, item):
+        for freebie in self.freebies:
+            if freebie.item_name == item:
+                return True
+        return False
 
     def __repr__(self):
         return f'<Dev {self.name}>'
