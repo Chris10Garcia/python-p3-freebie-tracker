@@ -48,6 +48,15 @@ class Company(Base):
     def oldest_company(cls):
         return min(cls.all, key=lambda x : x.founding_year)
 
+    def give_freebie(self, dev, item_name, value):
+        freebie = Freebie(item_name = item_name, value = value)
+
+        self.freebies.append(freebie)
+        dev.freebies.append(freebie)
+        dev.companies.append(self)
+
+        return freebie
+
     def __repr__(self):
         return f'<Company {self.name}>'
 
